@@ -55,6 +55,21 @@ class CallbackTest {
     }
 
     @Test
+    void shouldFailFormSubmissionWithEmptyName() {
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector("[data-test-id='phone'] input")).sendKeys("+79991231234");
+        form.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        form.findElement(By.cssSelector("button")).click();
+
+        WebElement result = form.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub"));
+        String expectedMsg = "Поле обязательно для заполнения";
+        String actualMsg = result.getText().trim();
+
+        assertTrue(result.isDisplayed());
+        assertEquals(expectedMsg, actualMsg);
+    }
+
+    @Test
     void shouldFailFormSubmissionWithInvalidName() {
         WebElement form = driver.findElement(By.cssSelector("form"));
         form.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Artem");
@@ -64,6 +79,21 @@ class CallbackTest {
 
         WebElement result = form.findElement(By.cssSelector("[data-test-id='name'].input_invalid .input__sub"));
         String expectedMsg = "Имя и Фамилия указаные неверно. Допустимы только русские буквы, пробелы и дефисы.";
+        String actualMsg = result.getText().trim();
+
+        assertTrue(result.isDisplayed());
+        assertEquals(expectedMsg, actualMsg);
+    }
+
+    @Test
+    void shouldFailFormSubmissionWithEmptyPhone() {
+        WebElement form = driver.findElement(By.cssSelector("form"));
+        form.findElement(By.cssSelector("[data-test-id='name'] input")).sendKeys("Петров Василий");
+        form.findElement(By.cssSelector("[data-test-id='agreement']")).click();
+        form.findElement(By.cssSelector("button")).click();
+
+        WebElement result = form.findElement(By.cssSelector("[data-test-id='phone'].input_invalid .input__sub"));
+        String expectedMsg = "Поле обязательно для заполнения";
         String actualMsg = result.getText().trim();
 
         assertTrue(result.isDisplayed());
@@ -101,4 +131,3 @@ class CallbackTest {
         assertEquals(expectedTextColor, actualTextColor);
     }
 }
-
